@@ -9,11 +9,13 @@
 </head>
 
 <body>
-    <form action="http://localhost:8080/login" method="GET">
+    <form action="http://localhost:8080/login" method="POST" enctype="multipart/form-data">
         用户名：
         <input type="text" name="user">
         <br/> 密码：
         <input type="password" name='pass'>
+        <br/>头像：
+        <input type="file" name="f1">
         <br/>
         <input type="submit" value="登录">
     </form>

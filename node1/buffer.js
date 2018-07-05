@@ -31,4 +31,12 @@ fs.readFile('a.jpg', (err, data) => {
             }
         })
     }
-})
+});
+
+// buffer 连接
+
+const a = new Buffer('aaa');
+const b = new Buffer('bbb');
+
+const c = Buffer.concat([a, b]); // concat 方法
+console.log(c); // <Buffer 61 61 61 62 62 62>

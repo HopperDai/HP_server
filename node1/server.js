@@ -13,11 +13,27 @@ const httpServer = http.createServer((req, res) => {
     console.log('接收到GET数据', pathname, query);
 
     // POST 数据。分段接收，数据为二进制类型
+    let aBuffer = [];
     req.on('data', data => {
-        // 文本可以转换为字符串。 -> enctype = 'application/x-www-form-urlencoded'
-
-        // 图片/文件 不能转换为字符串，需处理 -> enctype = 'multipart/form-data'
+        aBuffer.push(data);
     });
-    req.on('end', data => {});
+    req.on('end', () => {
+        const ct = req.headers['content-type'];
+        let data = Buffer.concat(aBuffer);
+        console.log(ct);
+
+        if (ct === 'application/x-www-form-urlencoded') {
+            // 文本可以转换为字符串。 -> enctype = 'application/x-www-form-urlencoded'
+
+            const post_data = querystring.parse(data.toString());
+            console.log('POST数据', post_data);
+        } else {
+            // 图片/文件 不能转换为字符串，需处理，不能破坏二进制数据 -> enctype = 'multipart/form-data'
+
+            console.log(data.toString());
+        }
+
+
+    });
 });
 httpServer.listen(port);
