@@ -14,6 +14,12 @@
 
 1.  数据交互: GET/POST/文件
 
+    - writeHeader 和 setHeader 的区别
+
+      - setHeader：设置 response 头，可以设置多次
+
+      - writeHeader：设置并发送 response 头（最后一次）
+
     - form 表单三种提交数据方式
 
       1.  GET
