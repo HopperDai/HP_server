@@ -86,10 +86,30 @@
 
         3-3 说明可以转字符串，toString()
 
-2.  文件
+2.  文件 -> 数据交互实现
 
-3.  压缩
+3.  压缩 zlib
 
-4.  管道操作
+    - 本质：流操作
 
-5.  接口管理（Router）
+4.  流 stream ： 读一块，发一块
+
+    任何连续的数据都叫流，文件流、网络流、音频流...
+
+    - 读取流：req、fs.createReadStream
+
+    - 写入流：res、fs.createWriteStream
+
+    - 读写流 -> 压缩流、加密。zlib.createGzip()
+
+    - 好处：减少内存的占用，增强系统性能（利用率高）
+
+    - 使用：
+
+      1.  压缩文件
+
+      2.  压缩网络数据 - Content-Encoding
+
+5.  管道操作 pipe：入口 -> 出口
+
+6.  接口管理（Router）
