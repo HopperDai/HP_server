@@ -39,7 +39,7 @@ server.use(multerObj.any());
 server.use(cookieParser(cookieKey));
 // session
 server.use(cookieSession({
-    secret: sessionKey
+    keys: sessionKey
 }));
 
 // 模板
