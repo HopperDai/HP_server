@@ -15,12 +15,18 @@ let server = express();
 server.listen(config.port);
 
 // 连接数据库
-mysql.createPool({
+let db = mysql.createPool({
     host: config.mysql_host,
     port: config.mysql_port,
     user: config.mysql_user,
     password: config.mysql_password,
     database: config.mysql_database
+});
+
+// 共享 db
+server.use((req, res, next) => {
+    req.db = db;
+    next();
 });
 
 // 中间件

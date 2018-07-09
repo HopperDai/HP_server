@@ -18,7 +18,9 @@ router.use((req, res, next) => {
 // RESTful
 // 登录->页面
 router.get('/login', (req, res) => {
-    res.render('login');
+    res.render('login', {
+        err: ''
+    });
 });
 
 // 登录->数据提交
@@ -27,7 +29,6 @@ router.post('/login', (req, res) => {
         username,
         password
     } = req.body;
-    console.log(username);
 
     // 判断两次
     if (username == config.root_username) {
@@ -35,11 +36,48 @@ router.post('/login', (req, res) => {
         if (common.md5(password) == config.root_password) {
             console.log('超级管理员登录成功');
             req.session['admin_id'] = '1'; // 区别其他管理员
-            res.end();
+            res.redirect('/admin/');
         } else {
             console.log('超级管理员登录失败');
+            showErr(用户或密码错误);
         }
     } else {
-        console.log('普通管理员');
+        // 普通管理员
+        let sql = `SELECT ID,password FROM admin_table WHERE username='${username}'`;
+
+        req.db.query(sql, (err, data) => {
+            if (err) {
+                console.log('数据库错误', err);
+                showErr('数据库错误');
+            } else {
+                // 判断用户是否存在
+                if (data.length) {
+                    if (data[0].password == common.md5(password)) {
+                        req.session['admin_id'] = data[0].ID;
+                        res.redirect('/admin/'); // 登录成功
+                    } else {
+                        showErr('用户或密码错误');
+                    }
+                } else {
+                    console.log('用户不存在');
+                    showErr('用户名或密码错误');
+                }
+            }
+        })
     }
+
+    function showErr(err) {
+        res.render('login', {
+            err
+        });
+    }
+});
+
+// admin 的根 -> house
+router.get('/', (req, res) => {
+    res.redirect('/admin/house');
+});
+
+router.get('/house', (req, res) => {
+    res.render('index');
 });
