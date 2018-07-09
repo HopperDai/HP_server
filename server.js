@@ -36,7 +36,7 @@ let multerObj = multer({
 server.use(multerObj.any());
 
 // cookie
-server.use(cookieParser(cookieKey));
+// server.use(cookieParser(cookieKey));
 // session
 server.use(cookieSession({
     keys: sessionKey

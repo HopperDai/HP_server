@@ -1,4 +1,6 @@
 const express = require("express");
+const config = require("../../config");
+const common = require("../../libs/common");
 
 let router = express.Router();
 module.exports = router;
@@ -21,5 +23,23 @@ router.get('/login', (req, res) => {
 
 // 登录->数据提交
 router.post('/login', (req, res) => {
-    console.log(req.body);
+    let {
+        username,
+        password
+    } = req.body;
+    console.log(username);
+
+    // 判断两次
+    if (username == config.root_username) {
+        // 超级管理员
+        if (common.md5(password) == config.root_password) {
+            console.log('超级管理员登录成功');
+            req.session['admin_id'] = '1'; // 区别其他管理员
+            res.end();
+        } else {
+            console.log('超级管理员登录失败');
+        }
+    } else {
+        console.log('普通管理员');
+    }
 });
