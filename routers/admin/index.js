@@ -86,3 +86,8 @@ router.get('/', (req, res) => {
 router.get('/house', (req, res) => {
     res.render('index');
 });
+
+router.post('/house', (req, res) => {
+    console.log(req.body);
+    res.end();
+});

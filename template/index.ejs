@@ -108,12 +108,15 @@
     <div class="panel-heading">
       <h3 class="panel-title">
         添加/修改
-        <a href="#" class="pull-right glyphicon glyphicon-remove"></a>
+        <a href="#" id="btn_close" class="pull-right glyphicon glyphicon-remove"></a>
       </h3>
     </div>
     <div class="panel-body" style="overflow:auto; height:460px;">
-      <form class="form-horizontal" method="post">
-        <div class="form-group">
+      <!-- action="?" 当前页面，当前地址，原地提交 -->
+      <form class="form-horizontal" action="?" method="post">
+        <div id="form-container"></div>
+
+        <!-- <div class="form-group">
           <label for="id1" class="col-sm-2 control-label">数据1</label>
           <div class="col-sm-10">
             <input type="text" class="form-control" id="id1" placeholder="请输入数据...">
@@ -156,9 +159,9 @@
         <div class="form-group">
           <div class="col-sm-10 col-sm-offset-2">
             <button type="submit" class="btn btn-primary">提交</button>
-            <button type="button" class="btn btn-danger">取消</button>
+            <button type="button" id="btn_cancel" class="btn btn-danger">取消</button>
           </div>
-        </div>
+        </div> -->
       </form>
     </div>
   </div>
@@ -168,10 +171,66 @@
     let btnAdd = $('#btn_add');
     let shadow = $('#shadow');
     let dialog = $('#dialog');
+    let btnClose = $('#btn_close');
+    let btnCancel = $('#btn_cancel');
 
-    btnAdd.onclick = () => {
-      shadow.style.display = "block";
+    btnAdd.on('click', () => {
+      shadow.css('display', 'block');
+      dialog.css('display', 'block');
+    });
+
+    btnClose.on('click', hideDialog);
+    btnCancel.on('click', hideDialog);
+
+    function hideDialog() {
+      shadow.css('display', 'none');
+      dialog.css('display', 'none');
     }
+
+    // 动态生成表单
+    let formContainer = $('#form-container');
+    const formInputs = [{
+        type: 'text',
+        name: 'title',
+        title: '标题'
+      },
+      {
+        type: 'text',
+        name: 'sub_title',
+        title: '副标题'
+      },
+      {
+        type: 'text',
+        name: 'position_main',
+        title: '主位置'
+      },
+      {
+        type: 'text',
+        name: 'position_second',
+        title: '副位置'
+      },
+    ];
+    formContainer.html();
+    let htmlStr = '';
+    formInputs.forEach((item, index) => {
+      htmlStr +=
+        `
+       <div class="form-group">
+          <label for="id${index}" class="col-sm-2 control-label">${item.title}</label>
+          <div class="col-sm-10">
+            <input type="${item.type}" name="${item.name}" class="form-control" id="id${index}" placeholder="请输入数据...">
+          </div>
+        </div>
+      `
+    });
+    htmlStr +=
+      `<div class="form-group">
+          <div class="col-sm-10 col-sm-offset-2">
+            <button type="submit" class="btn btn-primary">提交</button>
+            <button type="button" id="btn_cancel" class="btn btn-danger">取消</button>
+          </div>
+        </div>`;
+    formContainer.html(htmlStr);
   </script>
 </body>
 
