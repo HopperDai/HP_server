@@ -29,7 +29,7 @@
       <div class="navbar navbar-default">
         <form class="navbar-form navbar-left" action="index.html" method="post">
           <div class="form-group" style="margin-right:20px;">
-            <button type="button" class="btn btn-default glyphicon glyphicon-plus">新建</button>
+            <button type="button" id="btn_add" class="btn btn-default glyphicon glyphicon-plus">新建</button>
           </div>
           <div class="form-group" style="margin-right:20px;">
             <button type="button" class="btn btn-default glyphicon glyphicon-remove">删除</button>
@@ -103,8 +103,8 @@
     </div>
   </div>
 
-  <div class="shadow"></div>
-  <div class="panel panel-default add_modify_dialog">
+  <div id="shadow" class="shadow"></div>
+  <div id="dialog" class="panel panel-default add_modify_dialog">
     <div class="panel-heading">
       <h3 class="panel-title">
         添加/修改
@@ -162,6 +162,17 @@
       </form>
     </div>
   </div>
+
+  <script>
+    // const $ = document.querySelectorAll.bind(document);
+    let btnAdd = $('#btn_add');
+    let shadow = $('#shadow');
+    let dialog = $('#dialog');
+
+    btnAdd.onclick = () => {
+      shadow.style.display = "block";
+    }
+  </script>
 </body>
 
 </html>
