@@ -8,8 +8,8 @@ module.exports = router;
 
 // 进入所有的admin相关的页面（login除外）之前，都要校验用户身份，没登录->登录
 router.use((req, res, next) => {
-    if (!req.session['admin_id'] && (req.url != '/login')) { // 没登录
-        res.redirect('/admin/login'); // 重定向去登录
+    if (!req.session['admin_id'] && (req.path != '/login')) { // 没登录
+        res.redirect(`/admin/login?ref=${req.url}`); // 重定向去登录，附带登录前访问的路径
     } else {
         next();
     }
@@ -19,7 +19,8 @@ router.use((req, res, next) => {
 // 登录->页面
 router.get('/login', (req, res) => {
     res.render('login', {
-        err: ''
+        err: '',
+        ref: req.query['ref'] || ''
     });
 });
 
@@ -36,10 +37,11 @@ router.post('/login', (req, res) => {
         if (common.md5(password) == config.root_password) {
             console.log('超级管理员登录成功');
             req.session['admin_id'] = '1'; // 区别其他管理员
-            res.redirect('/admin/');
+            let ref = req.query['ref'] || ''; // 重定向回原来的访问地址
+            res.redirect(`/admin${ref}`);
         } else {
             console.log('超级管理员登录失败');
-            showErr(用户或密码错误);
+            showErr('用户或密码错误');
         }
     } else {
         // 普通管理员
@@ -54,7 +56,9 @@ router.post('/login', (req, res) => {
                 if (data.length) {
                     if (data[0].password == common.md5(password)) {
                         req.session['admin_id'] = data[0].ID;
-                        res.redirect('/admin/'); // 登录成功
+
+                        let ref = req.query['ref'] || ''; // 重定向回原来的访问地址
+                        res.redirect(`/admin${ref}`); // 登录成功。
                     } else {
                         showErr('用户或密码错误');
                     }
@@ -68,7 +72,8 @@ router.post('/login', (req, res) => {
 
     function showErr(err) {
         res.render('login', {
-            err
+            err,
+            ref: req.query['ref'] || ''
         });
     }
 });
